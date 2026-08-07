@@ -1,26 +1,117 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: #f7f7f4;
+  --surface: #f7f7f4;
+  --surface-strong: #ecece8;
+  --ink: #111111;
+  --ink-soft: #292929;
+  --muted: #666666;
+  --muted-light: #8a8a8a;
+  --line: rgb(17 17 17 / 0.14);
+  --line-strong: rgb(17 17 17 / 0.28);
+  --accent: #111111;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  scrollbar-gutter: stable;
 }
 
 body {
+  min-width: 0;
+  overflow-x: clip;
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+a,
+button {
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: #d9d9d1;
+  color: var(--ink);
+}
+
+.site-shell {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+.localized-text-en {
+  display: none;
+}
+
+html[lang="en"] .localized-text-de {
+  display: none;
+}
+
+html[lang="en"] .localized-text-en {
+  display: initial;
+}
+
+html[data-intro="skip"] .intro-loader,
+html[data-intro="complete"] .intro-loader {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+}
+
+@media print {
+  header,
+  .intro-loader {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff;
+  }
 }
