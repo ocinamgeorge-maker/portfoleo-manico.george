@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { headers } from "next/headers";
 
-import { copy } from "@/data/translations";
+import { seoKeywords, siteConfig } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/site-url";
 
 import "./globals.css";
@@ -13,11 +14,19 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrl(),
-  title: copy.seo.title.de,
-  description: copy.seo.description.de,
-  applicationName: "Manico George Portfolio",
-  creator: "Manico George",
-  category: "Portfolio",
+  title: {
+    default: siteConfig.title.de,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description.de,
+  applicationName: siteConfig.siteName,
+  keywords: seoKeywords,
+  authors: [{ name: siteConfig.name, url: getSiteUrl() }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  category: "technology",
+  referrer: "origin-when-cross-origin",
+  manifest: "/manifest.webmanifest",
 };
 
 export const viewport: Viewport = {
@@ -29,19 +38,26 @@ export const viewport: Viewport = {
 
 const bootstrapScript = `
   (function () {
-    try {
-      var queryLanguage = new URLSearchParams(window.location.search).get("lang");
-      var storedLanguage = window.localStorage.getItem("manico-portfolio-language");
-      var language = queryLanguage === "de" || queryLanguage === "en"
-        ? queryLanguage
-        : storedLanguage === "de" || storedLanguage === "en"
-          ? storedLanguage
-          : "de";
+    document.documentElement.classList.add("js");
 
-      document.documentElement.lang = language;
+    try {
+      var url = new URL(window.location.href);
+      var queryLanguage = url.searchParams.get("lang");
+      var storedLanguage = window.localStorage.getItem("manico-portfolio-language");
+      var hasQueryLanguage = queryLanguage === "de" || queryLanguage === "en";
+
+      if (!hasQueryLanguage && storedLanguage === "en") {
+        url.searchParams.set("lang", "en");
+        window.location.replace(url.toString());
+        return;
+      }
+
+      var language = hasQueryLanguage ? queryLanguage : "de";
+
+      document.documentElement.lang = language === "de" ? "de-CH" : "en";
       window.localStorage.setItem("manico-portfolio-language", language);
     } catch (_) {
-      document.documentElement.lang = "de";
+      document.documentElement.lang = "de-CH";
     }
 
     try {
@@ -58,10 +74,13 @@ type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const language =
+    (await headers()).get("x-portfolio-language") === "en" ? "en" : "de-CH";
+
   return (
     <html
-      lang="de"
+      lang={language}
       suppressHydrationWarning
       className={`${inter.variable} h-full antialiased`}
     >

@@ -2,13 +2,17 @@ import type { NavigationItem } from "@/lib/types";
 
 export const copy = {
   seo: {
+    role: {
+      de: "Softwareentwickler in Ausbildung",
+      en: "Software Development Apprentice",
+    },
     title: {
-      de: "Manico George – Fullstack & AI Developer",
-      en: "Manico George – Fullstack & AI Developer",
+      de: "Manico George — Softwareentwickler in Ausbildung bei Swisscom",
+      en: "Manico George — Software Developer Apprentice at Swisscom",
     },
     description: {
-      de: "Portfolio von Manico George, Softwareentwickler in Ausbildung bei Swisscom mit Fokus auf Fullstack-Entwicklung, DevOps, Webentwicklung und künstliche Intelligenz.",
-      en: "Portfolio of Manico George, a software developer apprentice at Swisscom focused on fullstack development, DevOps, web development and artificial intelligence.",
+      de: "Portfolio von Manico George, Softwareentwickler in Ausbildung bei Swisscom mit Fokus auf Fullstack-Entwicklung, künstliche Intelligenz und Webanwendungen.",
+      en: "Portfolio of Manico George, a Software Development Apprentice at Swisscom focused on full-stack development, artificial intelligence and web applications.",
     },
   },
   accessibility: {

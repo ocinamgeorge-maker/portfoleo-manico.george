@@ -1,8 +1,13 @@
 import { LocalizedText } from "@/components/ui/localized-text";
 import { PROFILE } from "@/data/profile";
 import { copy } from "@/data/translations";
+import type { Language } from "@/lib/types";
 
-export function Footer() {
+type FooterProps = {
+  language: Language;
+};
+
+export function Footer({ language }: FooterProps) {
   const currentYear = new Date().getUTCFullYear();
 
   return (
@@ -11,14 +16,14 @@ export function Footer() {
         <div>
           <p className="text-sm font-bold text-[var(--ink)]">{PROFILE.name}</p>
           <p className="mt-2 text-sm text-[var(--muted)]">
-            © {currentYear} · <LocalizedText text={copy.footer.builtWith} />
+            © {currentYear} · <LocalizedText text={copy.footer.builtWith} language={language} />
           </p>
         </div>
         <a
           href="#home"
           className="group inline-flex min-h-11 items-center gap-2 self-start text-sm font-semibold text-[var(--ink)] md:self-auto"
         >
-          <LocalizedText text={copy.footer.backToTop} />
+          <LocalizedText text={copy.footer.backToTop} language={language} />
           <span className="transition-transform duration-200 group-hover:-translate-y-0.5" aria-hidden="true">
             ↑
           </span>

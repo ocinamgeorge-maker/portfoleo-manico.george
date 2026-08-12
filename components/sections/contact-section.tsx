@@ -3,8 +3,13 @@ import { MaskReveal } from "@/components/ui/mask-reveal";
 import { Reveal } from "@/components/ui/reveal";
 import { PROFILE } from "@/data/profile";
 import { copy } from "@/data/translations";
+import type { Language } from "@/lib/types";
 
-export function ContactSection() {
+type ContactSectionProps = {
+  language: Language;
+};
+
+export function ContactSection({ language }: ContactSectionProps) {
   return (
     <section
       id="contact"
@@ -14,7 +19,7 @@ export function ContactSection() {
       <div className="mx-auto w-full max-w-[1500px] px-6 py-24 md:px-10 md:py-36 lg:px-12 lg:py-44">
         <Reveal>
           <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--muted)]">
-            <LocalizedText text={copy.contact.title} />
+            <LocalizedText text={copy.contact.title} language={language} />
           </p>
         </Reveal>
 
@@ -23,13 +28,13 @@ export function ContactSection() {
             id="contact-heading"
             className="max-w-5xl text-[clamp(3.2rem,7vw,8rem)] leading-[0.95] font-normal tracking-[-0.055em] text-[var(--ink)]"
           >
-            <LocalizedText text={copy.contact.statement} />
+            <LocalizedText text={copy.contact.statement} language={language} />
           </h2>
         </MaskReveal>
 
         <Reveal className="mt-10">
           <p className="text-base text-[var(--muted)] md:text-lg">
-            <LocalizedText text={copy.contact.focusLine} />
+            <LocalizedText text={copy.contact.focusLine} language={language} />
           </p>
         </Reveal>
 
@@ -58,7 +63,7 @@ export function ContactSection() {
                 href={PROFILE.phoneHref}
                 className="transition-colors duration-300 hover:text-black"
               >
-                <LocalizedText text={copy.contact.phone} /> ↗
+                <LocalizedText text={copy.contact.phone} language={language} /> ↗
               </a>
               {PROFILE.showCvButton ? (
                 <a
@@ -66,7 +71,7 @@ export function ContactSection() {
                   download
                   className="transition-colors duration-300 hover:text-black"
                 >
-                  <LocalizedText text={copy.contact.downloadCv} /> ↓
+                  <LocalizedText text={copy.contact.downloadCv} language={language} /> ↓
                 </a>
               ) : null}
             </div>

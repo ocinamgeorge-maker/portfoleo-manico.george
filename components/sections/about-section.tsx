@@ -3,13 +3,15 @@ import Image from "next/image";
 import { LocalizedText } from "@/components/ui/localized-text";
 import { Reveal } from "@/components/ui/reveal";
 import { copy } from "@/data/translations";
+import type { Language } from "@/lib/types";
 import portraitImage from "@/public/images/manico-george.jpg";
 
 type AboutSectionProps = {
   age: number;
+  language: Language;
 };
 
-export function AboutSection({ age }: AboutSectionProps) {
+export function AboutSection({ age, language }: AboutSectionProps) {
   return (
     <section
       id="about"
@@ -23,7 +25,7 @@ export function AboutSection({ age }: AboutSectionProps) {
               id="about-heading"
               className="text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--muted)]"
             >
-              <LocalizedText text={copy.about.title} />
+              <LocalizedText text={copy.about.title} language={language} />
             </h2>
 
             <div className="about-portrait relative mt-8 aspect-[4/5] w-[65vw] max-w-[260px] overflow-hidden rounded-[24px] bg-neutral-200 md:w-full md:max-w-[240px]">
@@ -38,7 +40,7 @@ export function AboutSection({ age }: AboutSectionProps) {
 
             <div className="mt-8 md:max-w-44">
               <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--muted)]">
-                <LocalizedText text={copy.about.age} />:
+                <LocalizedText text={copy.about.age} language={language} />:
               </p>
               <p className="mt-2 text-2xl font-normal text-[var(--ink)]" aria-live="off">
                 {age}
@@ -52,7 +54,7 @@ export function AboutSection({ age }: AboutSectionProps) {
                 key={`about-paragraph-${index}`}
                 className="max-w-5xl text-2xl leading-[1.18] font-normal tracking-[-0.025em] text-[var(--ink)] md:text-4xl"
               >
-                <LocalizedText text={paragraph} />
+                <LocalizedText text={paragraph} language={language} />
               </p>
             ))}
           </Reveal>

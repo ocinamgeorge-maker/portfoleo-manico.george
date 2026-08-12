@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { JsonLd } from "@/components/seo/json-ld";
 import { AboutSection } from "@/components/sections/about-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { HeroSection } from "@/components/sections/hero-section";
@@ -9,10 +10,15 @@ import { ProjectsSection } from "@/components/sections/projects-section";
 import { SkillsSection } from "@/components/sections/skills-section";
 import { IntroLoader } from "@/components/ui/intro-loader";
 import { PROFILE } from "@/data/profile";
-import { copy } from "@/data/translations";
 import { calculateAge } from "@/lib/calculate-age";
-import { getSiteUrl } from "@/lib/site-url";
-import { isLanguage, type Language } from "@/lib/types";
+import {
+  createPortfolioJsonLd,
+  getLanguageTag,
+  getLocalizedUrls,
+  getRequestedLanguage,
+  siteConfig,
+} from "@/lib/seo";
+import { getSiteUrl, isIndexableDeployment } from "@/lib/site-url";
 
 type HomePageProps = {
   searchParams: Promise<{
@@ -22,49 +28,44 @@ type HomePageProps = {
 
 export const revalidate = 3600;
 
-function getRequestedLanguage(value: string | string[] | undefined): Language {
-  const language = (Array.isArray(value) ? value[0] : value) ?? null;
-  return isLanguage(language) ? language : "de";
-}
-
 export async function generateMetadata({
   searchParams,
 }: HomePageProps): Promise<Metadata> {
   const parameters = await searchParams;
   const language = getRequestedLanguage(parameters.lang);
   const siteUrl = getSiteUrl();
-  const germanUrl = new URL("/", siteUrl);
-  const englishUrl = new URL("/?lang=en", siteUrl);
-  const canonicalUrl = language === "en" ? englishUrl : germanUrl;
-  const socialImageUrl = new URL(PROFILE.imagePath, siteUrl);
-  const title = copy.seo.title[language];
-  const description = copy.seo.description[language];
+  const localizedUrls = getLocalizedUrls(siteUrl);
+  const canonicalUrl = localizedUrls[language];
+  const socialImageUrl = new URL(siteConfig.socialImagePath, siteUrl);
+  const title = siteConfig.title[language];
+  const description = siteConfig.description[language];
+  const indexable = isIndexableDeployment();
 
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        "de-CH": germanUrl,
-        en: englishUrl,
-        "x-default": germanUrl,
+        "de-CH": localizedUrls.de,
+        en: localizedUrls.en,
+        "x-default": localizedUrls.de,
       },
     },
     openGraph: {
-      type: "profile",
+      type: "website",
       url: canonicalUrl,
       title,
       description,
-      siteName: PROFILE.name,
+      siteName: siteConfig.siteName,
       locale: language === "de" ? "de_CH" : "en_US",
       alternateLocale: language === "de" ? ["en_US"] : ["de_CH"],
       images: [
         {
           url: socialImageUrl,
           width: 1200,
-          height: 1500,
-          alt: PROFILE.name,
+          height: 630,
+          alt: title,
         },
       ],
     },
@@ -72,63 +73,54 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [socialImageUrl],
+      images: [{ url: socialImageUrl, alt: title }],
     },
     robots: {
-      index: true,
-      follow: true,
+      index: indexable,
+      follow: indexable,
+      nocache: !indexable,
+      googleBot: {
+        index: indexable,
+        follow: indexable,
+        noimageindex: !indexable,
+        "max-video-preview": indexable ? -1 : 0,
+        "max-image-preview": indexable ? "large" : "none",
+        "max-snippet": indexable ? -1 : 0,
+      },
     },
     other: {
-      "content-language": language === "de" ? "de-CH" : "en",
+      "content-language": getLanguageTag(language),
     },
   };
 }
 
-export default function Home() {
+export default async function Home({ searchParams }: HomePageProps) {
+  const parameters = await searchParams;
+  const language = getRequestedLanguage(parameters.lang);
   const age = calculateAge(PROFILE.birthDate);
   const siteUrl = getSiteUrl();
-  const personSchema = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: PROFILE.name,
-    url: siteUrl.href,
-    image: new URL(PROFILE.imagePath, siteUrl).href,
-    sameAs: [PROFILE.linkedinUrl],
-    jobTitle: [
-      "Softwareentwickler in Ausbildung",
-      "Software Developer Apprentice",
-    ],
-    affiliation: {
-      "@type": "Organization",
-      name: "Swisscom",
-    },
-    knowsAbout: [
-      "Fullstack Development",
-      "DevOps",
-      "Web Development",
-      "Artificial Intelligence",
-    ],
-  };
+  const localizedUrls = getLocalizedUrls(siteUrl);
+  const canonicalUrl = localizedUrls[language];
+  const structuredData = createPortfolioJsonLd(
+    language,
+    canonicalUrl,
+    siteUrl,
+  );
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(personSchema).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={structuredData} />
       <IntroLoader />
-      <div className="site-shell">
-        <Navbar />
+      <div className="site-shell" lang={getLanguageTag(language)}>
+        <Navbar language={language} />
         <main id="main-content">
-          <HeroSection />
-          <ProjectsSection />
-          <SkillsSection />
-          <AboutSection age={age} />
-          <ContactSection />
+          <HeroSection language={language} />
+          <ProjectsSection language={language} />
+          <SkillsSection language={language} />
+          <AboutSection age={age} language={language} />
+          <ContactSection language={language} />
         </main>
-        <Footer />
+        <Footer language={language} />
       </div>
     </>
   );

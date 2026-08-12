@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { siteConfig } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,7 +10,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const languages = {
     "de-CH": germanUrl,
     en: englishUrl,
+    "x-default": germanUrl,
   };
+  const portraitUrl = new URL(siteConfig.portraitPath, siteUrl).href;
 
   return [
     {
@@ -18,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 1,
       alternates: { languages },
+      images: [portraitUrl],
     },
     {
       url: englishUrl,
@@ -25,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.9,
       alternates: { languages },
+      images: [portraitUrl],
     },
   ];
 }

@@ -72,16 +72,17 @@ button:focus-visible {
   min-height: 100svh;
 }
 
-.localized-text-en {
+.intro-loader {
   display: none;
 }
 
-html[lang="en"] .localized-text-de {
-  display: none;
+html[data-intro="pending"] .intro-loader {
+  display: flex;
 }
 
-html[lang="en"] .localized-text-en {
-  display: initial;
+html.js .project-details {
+  height: 0;
+  opacity: 0;
 }
 
 html[data-intro="skip"] .intro-loader,

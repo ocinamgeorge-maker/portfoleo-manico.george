@@ -9,8 +9,13 @@ import { Reveal } from "@/components/ui/reveal";
 import { experiences } from "@/data/experience";
 import { copy } from "@/data/translations";
 import { formatExperiencePeriod } from "@/lib/format-period";
+import type { Language } from "@/lib/types";
 
-export function ProjectsSection() {
+type ProjectsSectionProps = {
+  language: Language;
+};
+
+export function ProjectsSection({ language }: ProjectsSectionProps) {
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
 
   return (
@@ -25,7 +30,7 @@ export function ProjectsSection() {
             id="projects-heading"
             className="text-[clamp(3rem,6vw,6rem)] leading-none font-medium tracking-[-0.05em] text-[var(--ink)]"
           >
-            <LocalizedText text={copy.projects.title} />
+            <LocalizedText text={copy.projects.title} language={language} />
           </h2>
         </MaskReveal>
 
@@ -40,6 +45,7 @@ export function ProjectsSection() {
               <ProjectTimelineItem
                 id={experience.id}
                 number={String(index + 1).padStart(2, "0")}
+                dateTime={experience.startDate.slice(0, 7)}
                 period={{
                   de: formatExperiencePeriod(experience, "de").replace(
                     " – ",
@@ -53,6 +59,7 @@ export function ProjectsSection() {
                 title={experience.projectTitle}
                 description={experience.projectSummary}
                 technologies={experience.projectTechnologies}
+                language={language}
                 moreLabel={copy.projects.showMore}
                 lessLabel={copy.projects.showLess}
                 open={openProjectId === experience.id}

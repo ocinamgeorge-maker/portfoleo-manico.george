@@ -1,18 +1,20 @@
 import { Fragment } from "react";
 
 import { LocalizedText } from "@/components/ui/localized-text";
-import type { SkillCategory } from "@/lib/types";
+import type { Language, SkillCategory } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 type SkillCapabilityGroupProps = {
   category: SkillCategory;
   number: string;
+  language: Language;
   className?: string;
 };
 
 export function SkillCapabilityGroup({
   category,
   number,
+  language,
   className,
 }: SkillCapabilityGroupProps) {
   return (
@@ -24,12 +26,12 @@ export function SkillCapabilityGroup({
           {number}
         </span>
         <h3 className="text-[10px] font-medium uppercase tracking-[0.16em] text-neutral-500">
-          <LocalizedText text={category.title} />
+          <LocalizedText text={category.title} language={language} />
         </h3>
       </div>
 
       <p className="mt-4 text-sm leading-6 text-neutral-500">
-        <LocalizedText text={category.description} />
+        <LocalizedText text={category.description} language={language} />
       </p>
 
       <div className="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1">

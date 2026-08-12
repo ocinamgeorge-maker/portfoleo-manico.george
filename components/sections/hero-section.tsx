@@ -7,13 +7,18 @@ import { useLayoutEffect, useRef } from "react";
 import { LocalizedText } from "@/components/ui/localized-text";
 import { PROFILE } from "@/data/profile";
 import { copy } from "@/data/translations";
+import type { Language } from "@/lib/types";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
 });
 
-export function HeroSection() {
+type HeroSectionProps = {
+  language: Language;
+};
+
+export function HeroSection({ language }: HeroSectionProps) {
   const heroRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -102,13 +107,13 @@ export function HeroSection() {
     >
       <div className="relative mx-auto min-h-[calc(100svh-80px)] w-full max-w-[1500px] overflow-hidden px-6 pt-8 pb-12 md:px-10 md:pt-[12vh] md:pb-16 lg:px-12 lg:pt-[14vh] min-[1700px]:-translate-x-[3vw]">
         <p className="hero-kicker max-w-[18rem] text-[9px] font-medium uppercase text-[rgb(12_12_12/0.55)] md:max-w-none md:text-[11px] lg:-ml-8 xl:-ml-10">
-          <LocalizedText text={copy.hero.eyebrow} />
+          <LocalizedText text={copy.hero.eyebrow} language={language} />
         </p>
 
         <div className="relative mt-8 md:mt-9">
           <h1 className="relative z-20 font-medium leading-[0.82] text-[#0c0c0c]">
             <span className="sr-only">
-              <LocalizedText text={copy.hero.title} />
+              <LocalizedText text={copy.hero.title} language={language} />
             </span>
             <span aria-hidden="true">
               <span className="block overflow-hidden pb-[0.08em] lg:-ml-8 xl:-ml-10">
@@ -145,7 +150,7 @@ export function HeroSection() {
           <div className="hero-motto flex items-center gap-4 text-sm text-[rgb(12_12_12/0.55)]">
             <span className="block h-px w-14 bg-black" aria-hidden="true" />
             <span className={instrumentSerif.className}>
-              <LocalizedText text={copy.hero.motto} />
+              <LocalizedText text={copy.hero.motto} language={language} />
             </span>
           </div>
 
@@ -156,7 +161,7 @@ export function HeroSection() {
               rel="noopener noreferrer"
               className="group inline-flex min-h-13 items-center gap-5 rounded-full border border-black px-7 py-3.5 text-sm font-medium text-black transition-[background-color,color] duration-300 hover:bg-black hover:text-white"
             >
-              <LocalizedText text={copy.hero.linkedin} />
+              <LocalizedText text={copy.hero.linkedin} language={language} />
               <span className="text-lg transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden="true">
                 ↗
               </span>
@@ -165,7 +170,7 @@ export function HeroSection() {
               href="#projects"
               className="group inline-flex min-h-11 items-center gap-3 text-sm font-medium text-black transition-opacity duration-300 hover:opacity-60"
             >
-              <LocalizedText text={copy.hero.viewProjects} />
+              <LocalizedText text={copy.hero.viewProjects} language={language} />
               <span className="transition-transform duration-300 group-hover:translate-y-1" aria-hidden="true">
                 ↓
               </span>

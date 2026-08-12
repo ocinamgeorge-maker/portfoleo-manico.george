@@ -4,8 +4,13 @@ import { MaskReveal } from "@/components/ui/mask-reveal";
 import { Reveal } from "@/components/ui/reveal";
 import { skillCategories } from "@/data/skills";
 import { copy } from "@/data/translations";
+import type { Language } from "@/lib/types";
 
-export function SkillsSection() {
+type SkillsSectionProps = {
+  language: Language;
+};
+
+export function SkillsSection({ language }: SkillsSectionProps) {
   return (
     <section
       id="skills"
@@ -15,7 +20,7 @@ export function SkillsSection() {
       <div className="mx-auto w-full max-w-[1500px] px-6 py-24 md:px-10 md:py-32 lg:px-12 lg:py-36">
         <Reveal>
           <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--muted)]">
-            <LocalizedText text={copy.skills.label} />
+            <LocalizedText text={copy.skills.label} language={language} />
           </p>
         </Reveal>
 
@@ -24,7 +29,7 @@ export function SkillsSection() {
             id="skills-heading"
             className="skills-heading max-w-[900px] text-[clamp(3.5rem,6vw,6.5rem)] leading-[0.95] font-medium tracking-[-0.055em] text-[var(--ink)]"
           >
-            <LocalizedText text={copy.skills.title} />
+            <LocalizedText text={copy.skills.title} language={language} />
           </h2>
         </MaskReveal>
 
@@ -40,6 +45,7 @@ export function SkillsSection() {
               <SkillCapabilityGroup
                 category={category}
                 number={String(index + 1).padStart(2, "0")}
+                language={language}
                 className={
                   index === 0
                     ? "md:pr-10"

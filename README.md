@@ -12,8 +12,8 @@ Eine responsive, zweisprachige One-Page-Portfolio-Website für Manico George. Di
 - Textbasierte Skills ohne Karten oder Badges
 - Dezente GSAP-Animationen mit `prefers-reduced-motion`-Unterstützung
 - Direkte Kontaktlinks ohne Kontaktformular oder Tracking
-- Next.js Metadata API, Open Graph, Twitter Cards und Canonical URL
-- Schema.org `Person`-Daten, `robots.txt` und `sitemap.xml`
+- Next.js Metadata API, Open Graph, Twitter Cards, Canonical und `hreflang`
+- Schema.org `WebSite`, `ProfilePage` und `Person`, `robots.txt` und `sitemap.xml`
 - Optionaler, standardmässig deaktivierter CV-Download
 
 ## Technischer Stack
@@ -91,6 +91,26 @@ Für die veröffentlichte Website in `.env.local` und in Vercel die echte HTTPS-
 NEXT_PUBLIC_SITE_URL=https://portfolio.example.com
 ```
 
+Auf Vercel dienen `VERCEL_PROJECT_PRODUCTION_URL` und bei Production-Deployments `VERCEL_URL` als sichere Fallbacks. Preview-URLs werden nicht als Canonical verwendet. Lokal fällt die Anwendung auf `http://localhost:3000` zurück.
+
+## SEO
+
+Die SEO-Konfiguration basiert ausschliesslich auf den Inhalten in `data/profile.ts`, `data/experience.ts`, `data/skills.ts` und `data/translations.ts`:
+
+- Sprachabhängige Titles und Descriptions über die Next.js Metadata API
+- Zentrale Keywords, Autorenangaben und Site-Daten in `lib/seo.ts`
+- Canonical URLs und Sprachalternativen für `/` sowie `/?lang=en`
+- Dynamisches Open-Graph-Bild unter `app/opengraph-image.tsx`
+- Twitter Large Image Card ohne erfundenen Accountnamen
+- JSON-LD-Graph mit `WebSite`, `ProfilePage` und `Person`
+- `robots.txt` mit `noindex`/`disallow` für lokale und Vercel-Preview-Deployments
+- Lokalisierte `sitemap.xml` inklusive Portrait als Bild-URL
+- Web App Manifest und vorhandenes App-Router-Favicon
+
+Für Production muss `NEXT_PUBLIC_SITE_URL` in Vercel auf die finale HTTPS-Domain gesetzt werden. Anschliessend sollten Domain und Sitemap in der Google Search Console registriert und das JSON-LD mit dem Schema Markup Validator geprüft werden.
+
+Empfohlene spätere SEO-Verbesserung: echte Locale-Routen wie `/de` und `/en` statt Query-Parametern verwenden. Die bestehende Routing-Struktur bleibt aktuell bewusst bei `/` und `/?lang=en`.
+
 ## Profilbild austauschen
 
 Der mitgelieferte JPEG-Platzhalter liegt unter:
@@ -119,9 +139,9 @@ Solange der Schalter `false` ist, wird kein Download-Button gerendert. Es ist ab
 
 ## Sprache und Übersetzungen
 
-Alle Texte befinden sich in `data/translations.ts`. Der Umschalter speichert `de` oder `en` unter `manico-portfolio-language` in `localStorage`. Die Auswahl wird vor dem ersten sichtbaren Rendern auf das `lang`-Attribut angewendet und zusätzlich als `?lang=en` in einer teilbaren englischen URL abgebildet.
+Alle Texte befinden sich in `data/translations.ts`. Der Umschalter speichert `de` oder `en` unter `manico-portfolio-language` in `localStorage`. Deutsch wird unter `/`, Englisch unter `/?lang=en` ausgeliefert.
 
-Deutsch ist die Standardsprache. Beide Sprachen werden serverseitig ausgegeben; CSS zeigt ausschliesslich die aktive Sprachversion. Dadurch entstehen beim Einlesen von `localStorage` keine Text-Hydration-Fehler.
+Pro URL wird nur die aktive Sprache serverseitig gerendert. `proxy.ts` setzt dazu `lang` und `Content-Language`, während der Sprachumschalter über den Next.js Router navigiert. Dadurch bleiben sichtbarer Inhalt, Canonical, Open Graph und JSON-LD synchron.
 
 ## Neue Projekte oder Stationen ergänzen
 

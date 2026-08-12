@@ -6,6 +6,7 @@ import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { LocalizedText } from "@/components/ui/localized-text";
 import { PROFILE } from "@/data/profile";
 import { copy, navigationItems } from "@/data/translations";
+import type { Language } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 const primaryLinks = navigationItems.filter(
@@ -16,7 +17,11 @@ const mobileLinks = [
   ...navigationItems.filter((item) => item.href === "#contact"),
 ];
 
-export function Navbar() {
+type NavbarProps = {
+  language: Language;
+};
+
+export function Navbar({ language }: NavbarProps) {
   const [isCompact, setIsCompact] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -52,7 +57,7 @@ export function Navbar() {
         href="#main-content"
         className="fixed top-3 left-3 z-[120] -translate-y-20 bg-black px-4 py-3 text-sm font-medium text-white transition-transform focus:translate-y-0"
       >
-        <LocalizedText text={copy.accessibility.skipToContent} />
+        <LocalizedText text={copy.accessibility.skipToContent} language={language} />
       </a>
 
       <header
@@ -74,7 +79,7 @@ export function Navbar() {
           </a>
 
           <span id="main-navigation-label" className="sr-only">
-            <LocalizedText text={copy.accessibility.mainNavigation} />
+            <LocalizedText text={copy.accessibility.mainNavigation} language={language} />
           </span>
           <nav
             className="hidden items-center gap-8 text-xs text-[var(--muted)] md:flex"
@@ -89,10 +94,10 @@ export function Navbar() {
                   item.href === "#about" ? "hidden min-[420px]:inline-flex" : "inline-flex",
                 )}
               >
-                <LocalizedText text={item.label} />
+                <LocalizedText text={item.label} language={language} />
               </a>
             ))}
-            <LanguageSwitcher />
+            <LanguageSwitcher language={language} />
             <a
               href={PROFILE.linkedinUrl}
               target="_blank"
@@ -104,7 +109,7 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3 md:hidden">
-            <LanguageSwitcher />
+            <LanguageSwitcher language={language} />
             <button
               type="button"
               className="inline-flex min-h-11 items-center text-xs font-medium text-[var(--muted)] transition-colors duration-300 hover:text-black"
@@ -112,12 +117,13 @@ export function Navbar() {
               aria-controls="mobile-navigation"
               onClick={() => setIsMenuOpen((current) => !current)}
             >
-              <span className="localized-text localized-text-de" lang="de">
-                {isMenuOpen ? "Schliessen" : "Menü"}
-              </span>
-              <span className="localized-text localized-text-en" lang="en">
-                {isMenuOpen ? "Close" : "Menu"}
-              </span>
+              {language === "de"
+                ? isMenuOpen
+                  ? "Schliessen"
+                  : "Menü"
+                : isMenuOpen
+                  ? "Close"
+                  : "Menu"}
             </button>
           </div>
         </div>
@@ -134,7 +140,7 @@ export function Navbar() {
         >
           <nav
             className="mx-auto flex max-w-[1500px] flex-col px-6 py-5 text-sm md:px-10"
-            aria-label="Mobile navigation"
+            aria-label={copy.accessibility.mobileNavigation[language]}
           >
             {mobileLinks.map((item) => (
               <a
@@ -143,7 +149,7 @@ export function Navbar() {
                 className="border-b border-[var(--line)] py-3.5 text-[var(--ink)]"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <LocalizedText text={item.label} />
+                <LocalizedText text={item.label} language={language} />
               </a>
             ))}
             <a
