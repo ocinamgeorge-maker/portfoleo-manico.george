@@ -1,9 +1,9 @@
 "use client";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ReactNode } from "react";
 import { useLayoutEffect, useRef } from "react";
+
+import { gsap, registerScrollTrigger } from "@/lib/gsap";
 
 type RevealProps = {
   children: ReactNode;
@@ -38,7 +38,7 @@ export function Reveal({
       return;
     }
 
-    gsap.registerPlugin(ScrollTrigger);
+    registerScrollTrigger();
 
     const context = gsap.context(() => {
       gsap.fromTo(

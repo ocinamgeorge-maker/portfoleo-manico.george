@@ -1,12 +1,12 @@
 "use client";
 
-import gsap from "gsap";
 import { Instrument_Serif } from "next/font/google";
 import { useLayoutEffect, useRef } from "react";
 
 import { LocalizedText } from "@/components/ui/localized-text";
 import { PROFILE } from "@/data/profile";
 import { copy } from "@/data/translations";
+import { gsap } from "@/lib/gsap";
 import type { Language } from "@/lib/types";
 
 const instrumentSerif = Instrument_Serif({

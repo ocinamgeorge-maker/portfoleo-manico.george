@@ -9,6 +9,7 @@ import { HeroSection } from "@/components/sections/hero-section";
 import { ProjectsSection } from "@/components/sections/projects-section";
 import { SkillsSection } from "@/components/sections/skills-section";
 import { IntroLoader } from "@/components/ui/intro-loader";
+import { SmoothScrollContent } from "@/components/ui/smooth-scroll";
 import { PROFILE } from "@/data/profile";
 import { calculateAge } from "@/lib/calculate-age";
 import {
@@ -111,17 +112,19 @@ export default async function Home({ searchParams }: HomePageProps) {
     <>
       <JsonLd data={structuredData} />
       <IntroLoader />
-      <div className="site-shell" lang={getLanguageTag(language)}>
-        <Navbar language={language} />
-        <main id="main-content">
-          <HeroSection language={language} />
-          <ProjectsSection language={language} />
-          <SkillsSection language={language} />
-          <AboutSection age={age} language={language} />
-          <ContactSection language={language} />
-        </main>
-        <Footer language={language} />
-      </div>
+      <Navbar language={language} />
+      <SmoothScrollContent>
+        <div className="site-shell" lang={getLanguageTag(language)}>
+          <main id="main-content" tabIndex={-1}>
+            <HeroSection language={language} />
+            <ProjectsSection language={language} />
+            <SkillsSection language={language} />
+            <AboutSection age={age} language={language} />
+            <ContactSection language={language} />
+          </main>
+          <Footer language={language} />
+        </div>
+      </SmoothScrollContent>
     </>
   );
 }

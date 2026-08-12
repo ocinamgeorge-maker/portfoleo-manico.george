@@ -27,9 +27,12 @@
 }
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 5rem;
   scrollbar-gutter: stable;
+}
+
+html.gsap-smooth-scroll {
+  scroll-behavior: auto;
 }
 
 body {

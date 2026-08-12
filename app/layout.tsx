@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 
+import { SmoothScroll } from "@/components/ui/smooth-scroll";
 import { seoKeywords, siteConfig } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/site-url";
 
@@ -87,7 +88,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootstrapScript }} />
       </head>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }

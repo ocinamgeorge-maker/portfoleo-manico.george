@@ -1,9 +1,9 @@
 "use client";
 
-import gsap from "gsap";
 import { useLayoutEffect, useRef } from "react";
 
 import { LocalizedText } from "@/components/ui/localized-text";
+import { gsap } from "@/lib/gsap";
 import type {
   Language,
   LocalizedText as LocalizedTextValue,

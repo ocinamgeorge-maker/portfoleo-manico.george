@@ -42,7 +42,7 @@ export function ContactSection({ language }: ContactSectionProps) {
           <address className="not-italic">
             <a
               href={`mailto:${PROFILE.email}`}
-              className="group inline-flex max-w-full items-start gap-3 break-all text-[clamp(2rem,5vw,5rem)] leading-[1.05] font-normal tracking-[-0.04em] text-[var(--ink)] transition-opacity duration-300 hover:opacity-60"
+              className="group inline-flex max-w-full items-start gap-3 whitespace-nowrap text-[clamp(1rem,5.4vw,2rem)] leading-[1.05] font-normal tracking-[-0.04em] text-[var(--ink)] transition-opacity duration-300 hover:opacity-60 md:text-[clamp(2rem,5vw,5rem)]"
             >
               <span>{PROFILE.email}</span>
               <span className="text-[0.45em] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden="true">

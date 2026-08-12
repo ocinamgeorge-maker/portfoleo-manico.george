@@ -1,10 +1,9 @@
 "use client";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ReactNode } from "react";
 import { useLayoutEffect, useRef } from "react";
 
+import { gsap, registerScrollTrigger } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 
 type MaskRevealProps = {
@@ -29,7 +28,7 @@ export function MaskReveal({ children, className }: MaskRevealProps) {
       return;
     }
 
-    gsap.registerPlugin(ScrollTrigger);
+    registerScrollTrigger();
 
     const context = gsap.context(() => {
       gsap.fromTo(
